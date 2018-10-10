@@ -28,20 +28,20 @@ from .views import (
 
 
 router = routers.SimpleRouter()
-#  Cписок доступных товаров/услуг с возможность поиска по доступным товарам/услугам и сортировка по цене
+#  Cписок доступных товаров/услуг с возможностью поиска по доступным товарам/услугам и сортировка по цене
 router.register(r'merchandises', MerchandiseViewSet)
 
 urlpatterns = [
-    #  Cписок всех ораганизаций
+    #  Cписок всех организаций
     url(r'^organizations/$', OrganizationsListView.as_view(), name='organizations'),
-    #  Информация об ораганизациях и конкретной организации
+    #  Информация об организациях и конкретной организации
     url(r'^organizations/organization_(?P<organization_id>.+)/$', OrganizationView.as_view(), name='organization_id'),
     #  Поиск организаций по району из общего списка районов через URL (organizations/district_<district_id>/...)
     url(r'^organizations/district_(?P<district_id>.+)/$', OrganizationDistrictView.as_view(),
         name='organization-district'),
     #  Cписок всех районов
     url(r'^districts/$', DistrictEnterprisesView.as_view()),
-    #  Поиск орагнизаций по району из общего списка районов через URL (districts/<district_id>/...)
+    #  Поиск организаций по району из общего списка районов через URL (districts/<district_id>/...)
     url(r'^districts/district_(?P<district_id>.+)/$', DistrictEnterpriseView.as_view()),
 
 ]
