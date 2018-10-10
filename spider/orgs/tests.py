@@ -82,7 +82,7 @@ class RestAPITest(TestCase):
         )
 
 
-#  TestCase для проверки информации о товаре или услуге
+#  TestCase для проверки информации о товаре или услуги
 class MerchDetailsTest(TestCase):
     def setUp(self):
         self.client = APIClient()
