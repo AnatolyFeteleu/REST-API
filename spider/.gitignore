@@ -1,0 +1,7 @@
+*.log
+*.pot
+*.pyc
+.idea/
+__pycache__/
+/orgs/static/CACHE/
+/spider_venv/
