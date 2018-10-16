@@ -14,24 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from rest_framework import routers
 from .views import (
     OrganizationView,
     OrganizationsListView,
     OrganizationDistrictView,
     DistrictEnterpriseView,
     DistrictEnterprisesView,
-    #  ViewSets
-    MerchandiseViewSet,
-
+    MerchandiseView,
+    MerchandiseListView,
 )
 
 
-router = routers.SimpleRouter()
-#  Cписок доступных товаров/услуг с возможностью поиска по доступным товарам/услугам и сортировка по цене
-router.register(r'merchandises', MerchandiseViewSet)
-
 urlpatterns = [
+    url(r'^merchandises/$', MerchandiseListView.as_view(), name='merchandises'),
+    url(r'^merchandises/(?P<merch_id>.+)/$', MerchandiseView.as_view(), name='merchandise'),
     #  Cписок всех организаций
     url(r'^organizations/$', OrganizationsListView.as_view(), name='organizations'),
     #  Информация об организациях и конкретной организации
@@ -45,5 +41,3 @@ urlpatterns = [
     url(r'^districts/district_(?P<district_id>.+)/$', DistrictEnterpriseView.as_view()),
 
 ]
-
-urlpatterns += router.urls

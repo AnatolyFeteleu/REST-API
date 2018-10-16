@@ -17,17 +17,34 @@ class OrganizationView(ListAPIView):
     serializer_class = EnterpriseSerializer
 
     def get_queryset(self):
-        organization_id = self.kwargs['organization_id']
-        enterprise = Enterprise.objects.filter(id=organization_id)
+        organization_id = self.kwargs.get('organization_id')
+        enterprise = Enterprise.objects.all().filter(id=organization_id)
         return enterprise
+
+
+class MerchandiseListView(ListAPIView):
+    queryset = Merchandise.objects.select_related('category').select_related('merch').all()
+    serializer_class = MerchandiseSerializer
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_fields = ('merch__name', 'enterprise', 'price', 'category')
+    ordering_fields = ('price',)
+
+
+class MerchandiseView(ListAPIView):
+    queryset = Merchandise.objects.select_related('category').all()
+
+    def get_queryset(self):
+        merch_id = self.kwargs.get('merch_id')
+        merchandise = Merchandise.objects.filter(id=merch_id)
+        return merchandise
 
 
 class OrganizationDistrictView(ListAPIView):
     serializer_class = EnterpriseSerializer
 
     def get_queryset(self):
-        district_id = self.kwargs['district_id']
-        enterprise = Enterprise.objects.filter(district=district_id)
+        district_id = self.kwargs.get('district_id')
+        enterprise = Enterprise.objects.prefetch_related('district').filter(district=district_id)
         return enterprise
 
 
@@ -45,14 +62,6 @@ class DistrictEnterpriseView(ListAPIView):
     serializer_class = DistrictSerializer
 
     def get_queryset(self):
-        district = self.kwargs['district_id']
+        district = self.kwargs.get('district_id')
         query = Enterprise.objects.filter(district=district)
         return query
-
-
-class MerchandiseViewSet(ReadOnlyModelViewSet):
-    queryset = Merchandise.objects.all()
-    serializer_class = MerchandiseSerializer
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_fields = ('name', 'enterprise', 'price', 'category', 'sales_in')
-    ordering_fields = ('price',)

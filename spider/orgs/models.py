@@ -33,12 +33,17 @@ class Enterprise(models.Model):
         return '{}'.format(self.name)
 
 
-class Merchandise(models.Model):
+class Merch(models.Model):
     name = models.CharField(max_length=25)
+    merch = models.ManyToManyField(
+        Enterprise,
+        through='Merchandise',
+    )
+
+
+# Промежуточная модель
+class Merchandise(models.Model):
     category = models.ForeignKey(Category)
     price = models.IntegerField()
     enterprise = models.ForeignKey(Enterprise)
-    sales_in = models.ManyToManyField(EnterpriseNetwork)
-
-    def __str__(self):
-        return '{} ({})'.format(self.name, self.category)
+    merch = models.ForeignKey(Merch)

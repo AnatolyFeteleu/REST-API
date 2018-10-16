@@ -9,5 +9,6 @@ admin.site.register(
         EnterpriseNetwork,
         Merchandise,
         Enterprise,
+        Merch
     ]
 )

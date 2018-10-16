@@ -2,15 +2,6 @@ from rest_framework import serializers
 from .models import Enterprise, Merchandise, District
 
 
-class EnterpriseSerializer(serializers.ModelSerializer):
-    district_name = serializers.StringRelatedField(source='district', many=True)
-    enterprise_id = serializers.IntegerField(source='id')
-
-    class Meta:
-        model = Enterprise
-        fields = ('enterprise_id', 'name', 'description', 'district', 'district_name')
-
-
 class EnterprisesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enterprise
@@ -20,11 +11,12 @@ class EnterprisesSerializer(serializers.ModelSerializer):
 class MerchandiseSerializer(serializers.ModelSerializer):
     enterprise_name = serializers.CharField(source='enterprise')
     enterprise_id = serializers.IntegerField(source='enterprise.id')
-    category = serializers.StringRelatedField()
+    category = serializers.CharField(source="category.name")
+    merch_name = serializers.CharField(source="merch.name")
 
     class Meta:
         model = Merchandise
-        fields = ('id', 'name', 'category', 'price', 'enterprise_id', 'enterprise_name')
+        fields = ('id', 'merch_name', 'category', 'price', 'enterprise_id', 'enterprise_name')
 
 
 class DistrictsSerializer(serializers.ModelSerializer):
@@ -41,3 +33,20 @@ class DistrictSerializer(serializers.ModelSerializer):
         model = District
         fields = ('enterprise_id', 'enterprise_name')
 
+
+class DistrictNameIdSerializer(serializers.ModelSerializer):
+    district_name = serializers.CharField(source='name')
+
+    class Meta:
+        model = District
+        fields = ('id', 'district_name',)
+
+
+class EnterpriseSerializer(serializers.ModelSerializer):
+    #  district_name = serializers.StringRelatedField(source='district', many=True)
+    districts = DistrictNameIdSerializer(many=True, read_only=True, source='district')
+    enterprise_id = serializers.IntegerField(source='id')
+
+    class Meta:
+        model = Enterprise
+        fields = ('enterprise_id', 'name', 'description', 'districts')

@@ -5,3 +5,5 @@
 __pycache__/
 /orgs/static/CACHE/
 /spider_venv/
+db.sqlite3
+*.swp
